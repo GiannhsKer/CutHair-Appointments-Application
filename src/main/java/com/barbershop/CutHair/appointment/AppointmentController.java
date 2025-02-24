@@ -20,6 +20,6 @@ public class AppointmentController {
 
     @GetMapping
     public List<Appointment> getAppointment(){
-        return ;
+        return appointmentService.getAppointments();
     }
 }

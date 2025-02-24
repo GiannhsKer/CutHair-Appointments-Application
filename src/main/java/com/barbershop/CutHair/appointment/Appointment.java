@@ -1,10 +1,17 @@
 package com.barbershop.CutHair.appointment;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import org.springframework.data.annotation.Id;
+
 import java.time.LocalDate;
 import java.util.UUID;
 
+@Entity
+@Table
 public class Appointment {
 
+    @Id
     private UUID id;
     private String name;
     private Long phoneNumber;
