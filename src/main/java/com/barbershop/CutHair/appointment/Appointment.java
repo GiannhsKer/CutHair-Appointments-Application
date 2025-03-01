@@ -1,33 +1,31 @@
 package com.barbershop.CutHair.appointment;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.*;
+
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @Table
 public class Appointment {
 
     @Id
-    private UUID id;
+    private String id;
     private String name;
-    private Long phoneNumber;
-    private LocalDate date_time;
+    private String phoneNumber;
+    private LocalDate dateTime;
 
     public Appointment() {
     }
 
-    public Appointment(UUID id, String name, Long phoneNumber, LocalDate date_time) {
+    public Appointment(String id, String name, String phoneNumber, LocalDate dateTime) {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
-        this.date_time = date_time;
+        this.dateTime = dateTime;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
@@ -35,15 +33,15 @@ public class Appointment {
         return name;
     }
 
-    public Long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public LocalDate getDate_time() {
-        return date_time;
+    public LocalDate getdateTime() {
+        return dateTime;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -51,12 +49,12 @@ public class Appointment {
         this.name = name;
     }
 
-    public void setPhoneNumber(Long phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setDate_time(LocalDate date_time) {
-        this.date_time = date_time;
+    public void setdateTime(LocalDate dateTime) {
+        this.dateTime = dateTime;
     }
 
     @Override
@@ -65,7 +63,7 @@ public class Appointment {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", phoneNumber=" + phoneNumber +
-                ", date_time=" + date_time +
+                ", dateTime=" + dateTime +
                 '}';
     }
 }

@@ -1,11 +1,10 @@
 package com.barbershop.CutHair.appointment;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "api/appointment")
@@ -21,5 +20,15 @@ public class AppointmentController {
     @GetMapping
     public List<Appointment> getAppointment(){
         return appointmentService.getAppointments();
+    }
+
+    @PostMapping
+    public void registerNewAppointment(@RequestBody Appointment appointment){
+        appointmentService.addNewAppointment(appointment);
+    }
+
+    @DeleteMapping(path = "{id}")
+    public void deleteAppointment(@PathVariable("id") String id){
+        appointmentService.deleteAppointment(id);
     }
 }
