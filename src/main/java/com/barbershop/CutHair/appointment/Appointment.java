@@ -1,24 +1,25 @@
 package com.barbershop.CutHair.appointment;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table
+@Table(name = "appointments")
 public class Appointment {
 
     @Id
     private String id;
     private String name;
     private String phoneNumber;
-    private LocalDate dateTime;
+    private LocalDateTime dateTime;
 
     public Appointment() {
     }
 
-    public Appointment(String id, String name, String phoneNumber, LocalDate dateTime) {
+    public Appointment(String id, String name, String phoneNumber, LocalDateTime dateTime) {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
@@ -37,7 +38,7 @@ public class Appointment {
         return phoneNumber;
     }
 
-    public LocalDate getdateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
@@ -53,7 +54,7 @@ public class Appointment {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setdateTime(LocalDate dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 

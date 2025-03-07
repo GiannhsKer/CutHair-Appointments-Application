@@ -1,0 +1,1 @@
+ALTER TABLE "appointment" RENAME TO "Appointment";
