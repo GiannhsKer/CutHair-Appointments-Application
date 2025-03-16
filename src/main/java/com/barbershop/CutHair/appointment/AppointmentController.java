@@ -5,13 +5,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "api/appointments")
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
-
+    
     @Autowired
     public AppointmentController(AppointmentService appointmentService){
         this.appointmentService = appointmentService;
@@ -19,27 +20,30 @@ public class AppointmentController {
 
     @GetMapping
     public List<Appointment> getAppointments(
-            @RequestParam(value = "id", required = false) String id,
-            @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "dateTime", required = false) LocalDateTime dateTime,
-            @RequestParam(value = "phoneNumber", required = false) String phoneNumber){
-//        if(!id.isBlank()){
-//            return appointmentService.getAppointments(id);
-//        }
-//        else if(!name.isBlank()){
-//            return appointmentService.getAppointments(name);
-//        }
-//        else if(!phoneNumber.isBlank()){
-//            return appointmentService.getAppointments(phoneNumber);
-//        }
-//        else if(dateTime != null){
-//            return appointmentService.getAppointments(dateTime);
-//        }
-        return appointmentService.getAppointments(id);
+            @RequestHeader(value = "id", required = false) String id,
+            @RequestHeader(value = "name", required = false) String name,
+            @RequestHeader(value = "dateTime", required = false) LocalDateTime dateTime,
+            @RequestHeader(value = "phoneNumber", required = false) String phoneNumber){
+        if(id != null){
+            return appointmentService.getAppointments(AppointmentProps.ID, id);
+        }
+        else if(name != null){
+            return appointmentService.getAppointments(AppointmentProps.NAME, name);
+        }
+        else if(phoneNumber != null){
+            return appointmentService.getAppointments(AppointmentProps.PHONE, phoneNumber);
+        }
+        else if(dateTime != null){
+            return appointmentService.getAppointments(AppointmentProps.DATE, dateTime);
+        }
+        return appointmentService.getAppointments(AppointmentProps.NULL,null);
     }
 
     @PostMapping
     public void registerNewAppointment(@RequestBody Appointment appointment){
+        if(null == appointment.getId()){
+            appointment.setId(UUID.randomUUID().toString());
+        }
         appointmentService.addNewAppointment(appointment);
     }
 
