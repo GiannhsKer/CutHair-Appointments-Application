@@ -3,27 +3,28 @@ package com.barbershop.CutHair.appointment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface AppointmentRepository extends JpaRepository<Appointment, String> {
+public interface AppointmentRepository extends JpaRepository<Appointment, UUID> {
 
-    @Override
-    @NonNull
-    @Query("select a from Appointment a where a.id = ?1")
-    Optional<Appointment> findById(String id);
-
-    @Query("select a from Appointment a where a.name = ?1")
+    @Query("SELECT a FROM Appointment a WHERE a.name = ?1")
     Optional<Appointment> findByName(String name);
 
-    @Query("select a from Appointment a where a.phoneNumber = ?1")
+    @Query("SELECT a FROM Appointment a WHERE a.phoneNumber = ?1")
     Optional<Appointment> findByPhone(String phoneNumber);
 
-    @Query("select a from Appointment a where a.dateTime between :startOfDay and :endOfDay")
+    @Query("SELECT a FROM Appointment a WHERE a.dateTime BETWEEN :startOfDay AND :endOfDay")
     List<Appointment> findByDate(@Param("startOfDay") LocalDateTime startOfDay, @Param("endOfDay") LocalDateTime endOfDay);
+
+    @Query("SELECT a FROM Appointment a WHERE a.dateTime < :endTime AND a.dateTime > :startTime AND (:id IS NULL OR a.id <> :id)")
+    List<Appointment> findByDateRange(@Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime, @Param("id") UUID id);
+
+    @Query("SELECT a FROM Appointment a WHERE a.phoneNumber = ?1 AND a.id != ?2")
+    Optional<Appointment> findByPhoneNumberAndIdNot(String phoneNumber, String excludeId);
 }
