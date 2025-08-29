@@ -1,13 +1,14 @@
-package com.barbershop.CutHair.appointment;
+package com.gi.cuthair.appointment.service;
 
-import com.barbershop.CutHair.appointment.dto.AppointmentRequest;
-import com.barbershop.CutHair.appointment.exception.AppointmentException;
+import com.gi.cuthair.appointment.model.Appointment;
+import com.gi.cuthair.appointment.model.AppointmentRequest;
+import com.gi.cuthair.appointment.exception.AppointmentException;
+import com.gi.cuthair.appointment.repository.AppointmentRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -20,7 +21,8 @@ import java.util.UUID;
 public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
-    private static final String APPOINTMENT_EXCEPTION_MESSAGE = "Store is open Thursday - Friday 10:00 - 20:30, Saturday 10:00 - 15:00";
+    private static final String APPOINTMENT_INVALID = "Please place your appointments Thursday - Friday 10:00 - 20:30, Saturday 10:00 - 15:00";
+    private static final String APPOINTMENT_CONFLICT = "There is already an appointment scheduled within 30 minutes of the requested time";
 
 //    private static final Logger log = LoggerFactory.getLogger(AppointmentService.class);
 
@@ -115,17 +117,20 @@ public class AppointmentService {
         int dayOfWeek = dateTime.getDayOfWeek().getValue();
         LocalTime appointmentTime = dateTime.toLocalTime();
         if(dayOfWeek == 1 || dayOfWeek == 7
-                || appointmentTime.isBefore(LocalTime.of(10, 0)) || appointmentTime.isAfter(LocalTime.of(20, 30))){
-            throw new AppointmentException(APPOINTMENT_EXCEPTION_MESSAGE);
-        } else if (dayOfWeek == 6 && appointmentTime.isBefore(LocalTime.of(10, 0)) || appointmentTime.isAfter(LocalTime.of(15, 0))){
-            throw new AppointmentException(APPOINTMENT_EXCEPTION_MESSAGE);
+                || appointmentTime.isBefore(LocalTime.of(10, 0))
+                || appointmentTime.isAfter(LocalTime.of(20, 30))){
+            throw new AppointmentException(APPOINTMENT_INVALID);
+        } else if (dayOfWeek == 6 && appointmentTime.isBefore(LocalTime.of(10, 0))
+                || appointmentTime.isAfter(LocalTime.of(15, 0))){
+            throw new AppointmentException(APPOINTMENT_INVALID);
         }
 
         // Check if there's already an appointment within 30 minutes of the requested time
-        List<Appointment> conflictingAppointments = appointmentRepository.findByDateRange(dateTime.minusMinutes(30), dateTime.plusMinutes(30),id);
+        List<Appointment> conflictingAppointments = appointmentRepository.findByDateRange(
+                dateTime.minusMinutes(30), dateTime.plusMinutes(30),id);
 
         if (!conflictingAppointments.isEmpty()) {
-            throw new AppointmentException("There is already an appointment scheduled within 30 minutes of the requested time");
+            throw new AppointmentException(APPOINTMENT_CONFLICT);
         }
     }
 

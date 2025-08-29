@@ -1,7 +1,7 @@
-//package com.barbershop.CutHair.appointment;
+//package com.gi.CutHair.appointment;
 //
-//import com.barbershop.CutHair.appointment.dto.AppointmentRequest;
-//import com.barbershop.CutHair.appointment.exception.AppointmentException;
+//import com.gi.CutHair.appointment.dto.AppointmentRequest;
+//import com.gi.CutHair.appointment.exception.AppointmentException;
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
 //import org.junit.jupiter.api.extension.ExtendWith;

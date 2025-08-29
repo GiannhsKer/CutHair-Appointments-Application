@@ -1,4 +1,4 @@
-package com.barbershop.CutHair.appointment.dto;
+package com.gi.cuthair.appointment.model;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -1,4 +1,4 @@
-package com.barbershop.CutHair.appointment.dto;
+package com.gi.cuthair.appointment.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,11 +14,7 @@ public class ApiResponse<T> {
     private String message;
     private T data;
     private LocalDateTime timestamp;
-    
-    public static <T> ApiResponse<T> success(T data) {
-        return new ApiResponse<>(true, "Success", data, LocalDateTime.now());
-    }
-    
+
     public static <T> ApiResponse<T> success(String message, T data) {
         return new ApiResponse<>(true, message, data, LocalDateTime.now());
     }

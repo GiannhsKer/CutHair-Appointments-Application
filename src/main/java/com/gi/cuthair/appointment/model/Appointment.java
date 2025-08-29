@@ -1,4 +1,4 @@
-package com.barbershop.CutHair.appointment;
+package com.gi.cuthair.appointment.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;

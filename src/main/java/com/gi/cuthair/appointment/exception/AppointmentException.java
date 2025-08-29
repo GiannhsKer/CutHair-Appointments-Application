@@ -1,4 +1,4 @@
-package com.barbershop.CutHair.appointment.exception;
+package com.gi.cuthair.appointment.exception;
 
 public class AppointmentException extends RuntimeException {
     

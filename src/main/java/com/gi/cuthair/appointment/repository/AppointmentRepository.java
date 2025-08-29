@@ -1,5 +1,6 @@
-package com.barbershop.CutHair.appointment;
+package com.gi.cuthair.appointment.repository;
 
+import com.gi.cuthair.appointment.model.Appointment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,9 +23,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
     @Query("SELECT a FROM Appointment a WHERE a.dateTime BETWEEN :startOfDay AND :endOfDay")
     List<Appointment> findByDate(@Param("startOfDay") LocalDateTime startOfDay, @Param("endOfDay") LocalDateTime endOfDay);
 
-    @Query("SELECT a FROM Appointment a WHERE a.dateTime < :endTime AND a.dateTime > :startTime AND (:id IS NULL OR a.id <> :id)")
+    @Query("SELECT a FROM Appointment a WHERE a.dateTime > :startTime AND a.dateTime < :endTime AND (:id IS NULL OR a.id <> :id)")
     List<Appointment> findByDateRange(@Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime, @Param("id") UUID id);
 
-    @Query("SELECT a FROM Appointment a WHERE a.phoneNumber = ?1 AND a.id != ?2")
-    Optional<Appointment> findByPhoneNumberAndIdNot(String phoneNumber, String excludeId);
 }

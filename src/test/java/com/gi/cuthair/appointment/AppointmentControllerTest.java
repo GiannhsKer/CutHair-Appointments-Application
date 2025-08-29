@@ -1,7 +1,7 @@
-//package com.barbershop.CutHair.appointment;
+//package com.gi.CutHair.appointment;
 //
-//import com.barbershop.CutHair.appointment.dto.AppointmentRequest;
-//import com.barbershop.CutHair.appointment.dto.AppointmentResponse;
+//import com.gi.CutHair.appointment.dto.AppointmentRequest;
+//import com.gi.CutHair.appointment.dto.AppointmentResponse;
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;

@@ -9,8 +9,8 @@
         <relativePath/>
         <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.barbershop</groupId>
-    <artifactId>CutHair</artifactId>
+    <groupId>com.gi</groupId>
+    <artifactId>cuthair</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>CutHair</name>
     <description>Spring Boot Project</description>

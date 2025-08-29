@@ -1,9 +1,10 @@
-package com.barbershop.CutHair.appointment;
+package com.gi.cuthair.appointment.controller;
 
-import com.barbershop.CutHair.appointment.dto.ApiResponse;
-import com.barbershop.CutHair.appointment.dto.AppointmentRequest;
-import com.barbershop.CutHair.appointment.dto.AppointmentResponse;
-import com.barbershop.CutHair.appointment.exception.AppointmentException;
+import com.gi.cuthair.appointment.exception.AppointmentException;
+import com.gi.cuthair.appointment.model.ApiResponse;
+import com.gi.cuthair.appointment.model.Appointment;
+import com.gi.cuthair.appointment.model.AppointmentRequest;
+import com.gi.cuthair.appointment.service.AppointmentService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -34,26 +36,23 @@ public class AppointmentController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<AppointmentResponse>>> getAllAppointments() {
+    public ResponseEntity<ApiResponse<List<Appointment>>> getAllAppointments() {
         log.info("GET /api/v1/appointments - Fetching all appointments");
-        List<AppointmentResponse> appointments = appointmentService.getAllAppointments()
-                .stream()
-                .map(AppointmentResponse::from)
-                .collect(Collectors.toList());
+        List<Appointment> appointments = new ArrayList<>(appointmentService.getAllAppointments());
         return ResponseEntity.ok(ApiResponse.success("Appointments retrieved successfully", appointments));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<AppointmentResponse>> getAppointmentById(@PathVariable UUID id) {
+    public ResponseEntity<ApiResponse<Appointment>> getAppointmentById(@PathVariable UUID id) {
         log.info("GET /api/v1/appointments/{} - Fetching appointment by id", id);
         return appointmentService.getAppointmentById(id)
-                .map(appointment -> ResponseEntity.ok(ApiResponse.success("Appointment retrieved successfully", AppointmentResponse.from(appointment))))
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .map(appointment -> ResponseEntity.ok(ApiResponse.success("Appointment retrieved successfully", appointment)))
+                .orElseGet(() ->ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(ApiResponse.error("Appointment not found with id: " + id)));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<List<AppointmentResponse>>> searchAppointments(
+    public ResponseEntity<ApiResponse<List<Appointment>>> searchAppointments(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String phone,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
@@ -62,57 +61,43 @@ public class AppointmentController {
 
         log.info("GET /api/v1/appointments/search - Searching appointments with name: {}, phone: {}, date: {}", name, phone, date);
 
-        List<AppointmentResponse> appointments;
+        List<Appointment> appointments;
 
         if (name != null) {
-            appointments = appointmentService.getAppointmentByName(name)
-                    .map(appointment -> List.of(AppointmentResponse.from(appointment)))
-                    .orElse(List.of());
+            appointments = new ArrayList<>(appointmentService.getAppointmentByName(name).stream().toList());
         } else if (phone != null) {
-            appointments = appointmentService.getAppointmentByPhone(phone)
-                    .map(appointment -> List.of(AppointmentResponse.from(appointment)))
-                    .orElse(List.of());
+            appointments = new ArrayList<>(appointmentService.getAppointmentByPhone(phone).stream().toList());
         } else if (date != null) {
-            appointments = appointmentService.getAppointmentsByDate(date)
-                    .stream()
-                    .map(AppointmentResponse::from)
-                    .collect(Collectors.toList());
+            appointments = new ArrayList<>(appointmentService.getAppointmentsByDate(date));
         } else if (startDate != null && endDate != null) {
-            appointments = appointmentService.getAppointmentsByDateRange(startDate, endDate)
-                    .stream()
-                    .map(AppointmentResponse::from)
-                    .collect(Collectors.toList());
+            appointments = new ArrayList<>(appointmentService.getAppointmentsByDateRange(startDate, endDate));
         } else {
-            appointments = appointmentService.getAllAppointments()
-                    .stream()
-                    .map(AppointmentResponse::from)
-                    .collect(Collectors.toList());
+            appointments = new ArrayList<>(appointmentService.getAllAppointments());
         }
 
         return ResponseEntity.ok(ApiResponse.success("Appointments retrieved successfully", appointments));
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<AppointmentResponse>> createAppointment(@Valid @RequestBody AppointmentRequest request) {
+    public ResponseEntity<ApiResponse<Appointment>> createAppointment(@Valid @RequestBody AppointmentRequest request) {
         log.info("POST /api/v1/appointments - Creating new appointment for: {}", request.getName());
         try {
             Appointment createdAppointment = appointmentService.createAppointment(request);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(ApiResponse.success("Appointment created successfully", AppointmentResponse.from(createdAppointment)));
+            return ResponseEntity.status(HttpStatus.CREATED).body(
+                    ApiResponse.success("Appointment created successfully", createdAppointment));
         } catch (AppointmentException e) {
             log.error("Error creating appointment: {}", e.getMessage());
-            return ResponseEntity.badRequest()
-                    .body(ApiResponse.error(e.getMessage()));
+            return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage()));
         }
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ApiResponse<AppointmentResponse>> updateAppointment(
+    public ResponseEntity<ApiResponse<Appointment>> updateAppointment(
             @Valid @RequestBody AppointmentRequest request, @PathVariable UUID id) {
         log.info("PATCH /api/v1/appointments/{} - Updating appointment", id);
         try {
             Appointment updatedAppointment = appointmentService.updateAppointment(request, id);
-            return ResponseEntity.ok(ApiResponse.success("Appointment updated successfully", AppointmentResponse.from(updatedAppointment)));
+            return ResponseEntity.ok(ApiResponse.success("Appointment updated successfully", updatedAppointment));
         } catch (AppointmentException e) {
             log.error("Error updating appointment: {}", e.getMessage());
             return ResponseEntity.badRequest()

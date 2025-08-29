@@ -1,6 +1,6 @@
 # Code Improvements Summary
 
-This document outlines all the improvements made to the CutHair barbershop appointment management system.
+This document outlines all the improvements made to the CutHair gi appointment management system.
 
 ## 🚀 Major Improvements
 

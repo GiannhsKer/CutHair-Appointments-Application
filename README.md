@@ -1,6 +1,6 @@
 # CutHair - Barbershop Appointment Management System
 
-A modern Spring Boot application for managing barbershop appointments with a RESTful API.
+A modern Spring Boot application for managing gi appointments with a RESTful API.
 
 ## Features
 
@@ -175,19 +175,22 @@ mvn flyway:migrate
 ## Project Structure
 
 ```
-src/main/java/com/barbershop/CutHair/
-├── CutHairApplication.java          # Main application class
+src/main/java/com/gi/cuthair/
+├── CutHairApplication.java              # Main application class
 └── appointment/
-    ├── Appointment.java             # Entity class
-    ├── AppointmentController.java   # REST controller
-    ├── AppointmentService.java      # Business logic
-    ├── AppointmentRepository.java   # Data access layer
-    ├── dto/                         # Data Transfer Objects
-    │   ├── AppointmentRequest.java
-    │   ├── AppointmentResponse.java
-    │   └── ApiResponse.java
-    └── exception/                   # Custom exceptions
-        └── AppointmentException.java
+    ├── controller/  
+    │   └── AppointmentController.java   # REST controller
+    ├── exception/                       # Custom exceptions
+    │   └── AppointmentException.java
+    ├── model/                           # Data Transfer Objects
+    │   ├── ApiResponse.java
+    │   ├── Appointment.java             # Entity class
+    │   └── AppointmentRequest.java
+    ├── repository/
+    │   └── AppointmentRepository.java   # Data access layer
+    └── service/    
+        └── AppointmentService.java      # Business logic
+        
 ```
 
 ## Contributing
