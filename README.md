@@ -1,4 +1,4 @@
-# CutHair - Barbershop Appointment Management System
+# CutHair - Appointment Management System
 
 A modern Spring Boot application for managing gi appointments with a RESTful API.
 
@@ -13,7 +13,6 @@ A modern Spring Boot application for managing gi appointments with a RESTful API
 - ✅ RESTful API with proper HTTP status codes
 - ✅ Cross-origin resource sharing (CORS) enabled
 - ✅ Structured logging
-- ✅ Database migrations with Flyway
 
 ## Technology Stack
 
@@ -21,7 +20,6 @@ A modern Spring Boot application for managing gi appointments with a RESTful API
 - **Spring Boot 3.4.3**
 - **Spring Data JPA**
 - **PostgreSQL**
-- **Flyway** (Database migrations)
 - **Lombok** (Reduces boilerplate code)
 - **Jakarta Validation**
 
@@ -50,10 +48,6 @@ mvn spring-boot:run
 ```
 
 The application will start on `http://localhost:8080`
-
-### 3. Database Migrations
-
-The application uses Flyway for database migrations. Migrations will run automatically on startup.
 
 ## API Documentation
 
@@ -115,8 +109,8 @@ Content-Type: application/json
 
 **Validation Rules:**
 - Name: 2-100 characters, required
-- Phone Number: Exactly 10 digits, required, unique
-- Date Time: Must be in the future, within business hours (9 AM - 6 PM)
+- Phone Number: Exactly 10 digits, starting with 69, required, unique
+- Date Time: Must be in the future, within business hours (10 AM - 8:30 PM)
 
 #### 5. Update Appointment
 ```http
